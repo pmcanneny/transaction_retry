@@ -40,7 +40,8 @@ module TransactionRetry
           # An ugly tr_ prefix is used to minimize the risk of method clash in the future.
           def tr_exponential_pause( count )
             seconds = TransactionRetry.wait_times[count-1] || 32
-            sleep( seconds ) if seconds > 0
+            random_salt = Random.new.rand(30..60)
+            sleep( seconds + random_salt ) if seconds > 0
           end
         
           # Returns true if we are in the nested transaction (the one with :requires_new => true).
